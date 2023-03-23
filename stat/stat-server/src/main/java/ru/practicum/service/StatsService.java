@@ -10,7 +10,7 @@ public interface StatsService {
     EndpointHitDto create(EndpointHitDto endpointHitDto);
 
     List<ViewStatsDto> getViewStats(LocalDateTime start,
-                                LocalDateTime end,
-                                List<String> uris,
-                                Boolean unique);
+                                    LocalDateTime end,
+                                    List<String> uris,
+                                    Boolean unique);
 }

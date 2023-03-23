@@ -30,6 +30,6 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "group by hit.app, hit.uri " +
             "order by count(hit.ip) desc")
     List<ViewStats> getStatsNotUnique(LocalDateTime start,
-                                         LocalDateTime end,
-                                         List<String> uris);
+                                      LocalDateTime end,
+                                      List<String> uris);
 }
