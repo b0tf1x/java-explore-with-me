@@ -21,17 +21,19 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class StatsController {
     private final StatsService statsService;
+
     @PostMapping("/hit")
-    public EndpointHitDto create(@Validated @RequestBody EndpointHitDto endpointHitDto){
+    public EndpointHitDto create(@Validated @RequestBody EndpointHitDto endpointHitDto) {
         return statsService.create(endpointHitDto);
     }
+
     @GetMapping
     public List<ViewStatsDto> getViewStats(@RequestParam String start,
                                            @RequestParam String end,
                                            @RequestParam List<String> uris,
-                                           @RequestParam Boolean unique){
+                                           @RequestParam Boolean unique) {
         return statsService.getViewStats(LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                uris,unique);
+                uris, unique);
     }
 }
