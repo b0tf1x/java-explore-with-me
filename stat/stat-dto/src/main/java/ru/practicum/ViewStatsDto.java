@@ -1,9 +1,9 @@
 package ru.practicum;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class ViewStatsDto {
     private String app;
