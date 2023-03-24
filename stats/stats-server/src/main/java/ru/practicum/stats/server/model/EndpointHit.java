@@ -2,6 +2,7 @@ package ru.practicum.stats.server.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,9 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "hit")

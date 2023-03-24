@@ -1,8 +1,7 @@
 package ru.practicum.stats.server.controller;
 
-import ru.practicum.stats.dto.CreateEndpointHitDto;
 import ru.practicum.stats.dto.EndpointHitDto;
-import ru.practicum.stats.dto.ViewStats;
+import ru.practicum.stats.dto.ViewStatsDto;
 import ru.practicum.stats.server.service.StatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,17 +23,17 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHitDto saveEndpointHit(@Valid @RequestBody CreateEndpointHitDto createEndpointHitDto) {
-        return statsService.saveEndpointHit(createEndpointHitDto);
+    public EndpointHitDto saveEndpointHit(@Valid @RequestBody EndpointHitDto endpointHitDto) {
+        return statsService.create(endpointHitDto);
     }
 
     @GetMapping("/stats")
-    public List<ViewStats> getStatistics(
+    public List<ViewStatsDto> getStatistics(
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end,
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique
     ) {
-        return statsService.getStatistics(start, end, uris, unique);
+        return statsService.getStats(start, end, uris, unique);
     }
 }

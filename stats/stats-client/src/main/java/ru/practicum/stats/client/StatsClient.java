@@ -7,8 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.practicum.stats.dto.CreateEndpointHitDto;
-import ru.practicum.stats.dto.ViewStats;
+import ru.practicum.stats.dto.EndpointHitDto;
+import ru.practicum.stats.dto.ViewStatsDto;
 
 import java.util.List;
 
@@ -23,17 +23,17 @@ public class StatsClient {
                 .build();
     }
 
-    public void saveEndpointHit(CreateEndpointHitDto createEndpointHitDto) {
+    public void create(EndpointHitDto endpointHitDto) {
         webClient.post()
                 .uri("/hit")
-                .body(Mono.just(createEndpointHitDto), CreateEndpointHitDto.class)
+                .body(Mono.just(endpointHitDto), EndpointHitDto.class)
                 .retrieve();
     }
 
-    public Mono<List<ViewStats>> getStatistics() {
+    public Mono<List<ViewStatsDto>> getStats() {
         return webClient.get()
                 .uri("/stats")
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<ViewStats>>() {});
+                .bodyToMono(new ParameterizedTypeReference<List<ViewStatsDto>>() {});
     }
 }
