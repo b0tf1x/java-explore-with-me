@@ -21,14 +21,14 @@ public class StatClient {
                 .build();
     }
 
-    public void saveEndpointHit(EndpointHitDto endpointHitDto) {
+    public void create(EndpointHitDto endpointHitDto) {
         webClient.post()
                 .uri("/hit")
                 .body(Mono.just(endpointHitDto), EndpointHitDto.class)
                 .retrieve();
     }
 
-    public Mono<List<ViewStatsDto>> getStatistics() {
+    public Mono<List<ViewStatsDto>> getViewStats() {
         return webClient.get()
                 .uri("/stats")
                 .retrieve()
