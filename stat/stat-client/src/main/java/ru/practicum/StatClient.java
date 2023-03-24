@@ -21,10 +21,10 @@ public class StatClient {
                 .build();
     }
 
-    public void saveEndpointHit(CreateHit createEndpointHitDto) {
+    public void saveEndpointHit(EndpointHitDto endpointHitDto) {
         webClient.post()
                 .uri("/hit")
-                .body(Mono.just(createEndpointHitDto), CreateHit.class)
+                .body(Mono.just(endpointHitDto), EndpointHitDto.class)
                 .retrieve();
     }
 

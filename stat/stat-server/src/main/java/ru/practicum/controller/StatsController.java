@@ -17,13 +17,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@Validated
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class StatsController {
     private final StatsService statsService;
 
     @PostMapping("/hit")
-    public EndpointHitDto create(@Validated @RequestBody EndpointHitDto endpointHitDto) {
+    public EndpointHitDto create(@RequestBody EndpointHitDto endpointHitDto) {
         return statsService.create(endpointHitDto);
     }
 
