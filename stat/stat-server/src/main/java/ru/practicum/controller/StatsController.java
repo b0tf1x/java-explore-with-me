@@ -27,7 +27,7 @@ public class StatsController {
         return statsService.create(endpointHitDto);
     }
 
-    @GetMapping
+    @GetMapping("/stats")
     public List<ViewStatsDto> getViewStats(@RequestParam String start,
                                            @RequestParam String end,
                                            @RequestParam List<String> uris,
