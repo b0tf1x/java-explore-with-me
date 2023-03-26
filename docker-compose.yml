@@ -22,7 +22,7 @@ services:
       - POSTGRES_PASSWORD=root
 
   ewm-service:
-    build: ewm-main
+    build: ewm
     image: ewm-main
     container_name: ewm_main_container
     ports:
