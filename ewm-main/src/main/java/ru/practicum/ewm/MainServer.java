@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 
 @SpringBootApplication
-public class EwmServer {
+public class MainServer {
     public static void main(String[] args) {
-        SpringApplication.run(EwmServer.class, args);
+        SpringApplication.run(MainServer.class, args);
     }
 }
