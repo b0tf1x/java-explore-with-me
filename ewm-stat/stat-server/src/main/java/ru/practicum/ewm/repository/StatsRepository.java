@@ -1,11 +1,11 @@
 package ru.practicum.ewm.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.model.EndpointHit;
 import ru.practicum.ewm.model.ViewStats;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,6 +30,6 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "group by hit.app, hit.uri " +
             "order by count(hit.ip) desc")
     List<ViewStats> getStatsNotUnique(LocalDateTime start,
-                                   LocalDateTime end,
-                                   List<String> uris);
+                                      LocalDateTime end,
+                                      List<String> uris);
 }

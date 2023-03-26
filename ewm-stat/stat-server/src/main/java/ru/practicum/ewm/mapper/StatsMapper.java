@@ -1,8 +1,8 @@
 package ru.practicum.ewm.mapper;
 
 import ru.practicum.ewm.dto.EndpointHitDto;
-import ru.practicum.ewm.model.EndpointHit;
 import ru.practicum.ewm.dto.ViewStatsDto;
+import ru.practicum.ewm.model.EndpointHit;
 import ru.practicum.ewm.model.ViewStats;
 
 public class StatsMapper {
@@ -26,5 +26,11 @@ public class StatsMapper {
         return new ViewStatsDto(viewStats.getApp(),
                 viewStats.getUri(),
                 viewStats.getHits());
+    }
+
+    public static ViewStats toViewStat(ViewStatsDto viewStatsDto) {
+        return new ViewStats(viewStatsDto.getApp(),
+                viewStatsDto.getUri(),
+                viewStatsDto.getHits());
     }
 }
