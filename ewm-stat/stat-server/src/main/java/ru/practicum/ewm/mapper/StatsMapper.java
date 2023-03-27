@@ -27,5 +27,5 @@ public class StatsMapper {
                 viewStats.getUri(),
                 viewStats.getHits());
     }
-    
+
 }
