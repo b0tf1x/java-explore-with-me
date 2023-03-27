@@ -27,10 +27,5 @@ public class StatsMapper {
                 viewStats.getUri(),
                 viewStats.getHits());
     }
-
-    public static ViewStats toViewStat(ViewStatsDto viewStatsDto) {
-        return new ViewStats(viewStatsDto.getApp(),
-                viewStatsDto.getUri(),
-                viewStatsDto.getHits());
-    }
+    
 }
