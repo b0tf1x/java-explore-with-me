@@ -81,13 +81,13 @@ public class EventsServiceImpl implements EventsService {
         Event event = eventsRepository.findById(eventId).orElseThrow(() -> {
             throw new NotFoundException("Событие не найдено");
         });
-        if (event.getEventStatuses() == EventStatuses.PUBLISHED && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED)) {
+        if (event.getEventStatuses().equals(EventStatuses.PUBLISHED.name()) && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.name())) {
             throw new BadRequestException("Событие уже опубликовано");
         }
         if (LocalDateTime.parse(updateEventAdminRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Событие уже прошло");
         }
-        if (event.getEventStatuses() == EventStatuses.CANCELED && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED)) {
+        if (event.getEventStatuses().equals(EventStatuses.CANCELED.name()) && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.name())) {
             throw new BadRequestException("Нельзя опубликовать. Событие отмененено.");
         }
         if (updateEventAdminRequest.getCategory() != null) {
