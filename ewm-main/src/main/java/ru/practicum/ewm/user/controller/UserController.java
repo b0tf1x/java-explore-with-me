@@ -23,19 +23,22 @@ import java.util.List;
 @RequestMapping("/admin/users")
 public class UserController {
     private final UserService userService;
+
     @GetMapping
-    public List<UserDto> findAll(List<Long>ids,
+    public List<UserDto> findAll(List<Long> ids,
                                  @RequestParam(defaultValue = "0") Integer from,
-                                 @RequestParam(defaultValue = "20") Integer size){
+                                 @RequestParam(defaultValue = "20") Integer size) {
         PageRequest page = PageRequest.of(from / size, size);
         return userService.findAll(ids, page);
     }
+
     @PostMapping
-    public UserDto create(@Validated @RequestBody UserDto userDto){
+    public UserDto create(@Validated @RequestBody UserDto userDto) {
         return userService.create(userDto);
     }
+
     @DeleteMapping("/{userId}")
-    public void delete(@PathVariable long userId){
+    public void delete(@PathVariable long userId) {
         userService.delete(userId);
     }
 }

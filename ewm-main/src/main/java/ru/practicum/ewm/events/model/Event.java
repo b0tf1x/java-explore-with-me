@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnJava;
 import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.events.functions.EventStatuses;
 import ru.practicum.ewm.user.model.User;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

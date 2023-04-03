@@ -30,12 +30,14 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public UserDto create(UserDto userDto) {
         User user = userRepository.save(UserMapper.toUser(userDto));
         return UserMapper.toUserDto(user);
     }
+
     @Transactional
     @Override
     public void delete(long userId) {

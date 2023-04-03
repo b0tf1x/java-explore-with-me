@@ -21,18 +21,21 @@ import java.util.List;
 @RequestMapping("/users/{userId}/requests")
 public class RequestsController {
     private final RequestService requestService;
+
     @PostMapping
     public RequestDto create(@PathVariable Long userId,
-                             @RequestParam Long eventId){
-       return requestService.create(userId,eventId);
+                             @RequestParam Long eventId) {
+        return requestService.create(userId, eventId);
     }
+
     @GetMapping
-    public List<RequestDto>findById(@PathVariable Long userId){
+    public List<RequestDto> findById(@PathVariable Long userId) {
         return requestService.findByInitiatorId(userId);
     }
+
     @PatchMapping("/{requestId}/cancel")
     public RequestDto cancel(@PathVariable Long userId,
-                             @PathVariable Long requestId){
-        return requestService.cancel(userId,requestId);
+                             @PathVariable Long requestId) {
+        return requestService.cancel(userId, requestId);
     }
 }

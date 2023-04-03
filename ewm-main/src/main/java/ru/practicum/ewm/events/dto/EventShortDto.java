@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.ewm.categories.dto.CategoryDto;
 import ru.practicum.ewm.user.dto.UserShortDto;
+
 @Data
 @Builder
 @AllArgsConstructor

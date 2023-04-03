@@ -16,7 +16,8 @@ public class CompilationMapper {
                 updateCompilationRequest.getTitle(),
                 events);
     }
-    public static CompilationDto toCompilationDto(Compilation compilation){
+
+    public static CompilationDto toCompilationDto(Compilation compilation) {
         return new CompilationDto(compilation.getId(),
                 compilation.getEvents().stream()
                         .map(EventMapper::toShortFromModel)

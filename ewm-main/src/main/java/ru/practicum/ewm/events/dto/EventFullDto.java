@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.ewm.categories.dto.CategoryDto;
 import ru.practicum.ewm.events.model.Location;
 import ru.practicum.ewm.user.dto.UserShortDto;
+
 @Data
 @Builder
 @AllArgsConstructor

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.ewm.events.model.Location;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

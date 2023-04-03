@@ -46,8 +46,9 @@ public class CompilationsController {
         PageRequest pageable = PageRequest.of(from / size, size);
         return compilationService.findAll(pinned, pageable);
     }
+
     @GetMapping("/compilations/{compId}")
-    public CompilationDto findById(@PathVariable Long compId){
+    public CompilationDto findById(@PathVariable Long compId) {
         return compilationService.findById(compId);
     }
 }

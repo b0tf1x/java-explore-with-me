@@ -45,8 +45,9 @@ public class CategoryController {
         PageRequest pageable = PageRequest.of(from / size, size);
         return categoriesService.findAll(pageable);
     }
+
     @GetMapping("/categories/{catId}")
-    public CategoryDto findById(@PathVariable Long catId){
+    public CategoryDto findById(@PathVariable Long catId) {
         return categoriesService.findById(catId);
     }
 }

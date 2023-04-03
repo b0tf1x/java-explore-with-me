@@ -23,35 +23,39 @@ import java.util.List;
 @Validated
 public class EventsController {
     private final EventsService eventsService;
+
     @GetMapping("/admin/events")
     public List<EventFullDto> findEventsAdmin(@RequestParam(required = false) List<Long> users,
-                                         @RequestParam(required = false) List<EventStatuses> states,
-                                         @RequestParam(required = false) List<Long> categories,
-                                         @RequestParam(required = false) String rangeStart,
-                                         @RequestParam(required = false) String rangeEnd,
-                                         @RequestParam(defaultValue = "0") Integer from,
-                                         @RequestParam(defaultValue = "20") Integer size) {
+                                              @RequestParam(required = false) List<EventStatuses> states,
+                                              @RequestParam(required = false) List<Long> categories,
+                                              @RequestParam(required = false) String rangeStart,
+                                              @RequestParam(required = false) String rangeEnd,
+                                              @RequestParam(defaultValue = "0") Integer from,
+                                              @RequestParam(defaultValue = "20") Integer size) {
         return eventsService.findEventsAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
+
     @PatchMapping("/admin/events/{eventId}")
-    public EventFullDto update(@PathVariable Long eventId, @RequestBody UpdateEventAdminRequest updateEventAdminRequest){
+    public EventFullDto update(@PathVariable Long eventId, @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         return eventsService.update(eventId, updateEventAdminRequest);
     }
+
     @GetMapping("/events")
-    public List<EventShortDto>findEvents(@RequestParam(required = false) String text,
-                                         @RequestParam(required = false) List<Long> categories,
-                                         @RequestParam(required = false) Boolean paid,
-                                         @RequestParam(required = false) String rangeStart,
-                                         @RequestParam(required = false) String rangeEnd,
-                                         @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-                                         @RequestParam(required = false) String sort,
-                                         @RequestParam(defaultValue = "0") Integer from,
-                                         @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventShortDto> findEvents(@RequestParam(required = false) String text,
+                                          @RequestParam(required = false) List<Long> categories,
+                                          @RequestParam(required = false) Boolean paid,
+                                          @RequestParam(required = false) String rangeStart,
+                                          @RequestParam(required = false) String rangeEnd,
+                                          @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+                                          @RequestParam(required = false) String sort,
+                                          @RequestParam(defaultValue = "0") Integer from,
+                                          @RequestParam(defaultValue = "10") Integer size) {
         PageRequest pageable = PageRequest.of(from / size, size);
-        return eventsService.findEvents(text, categories,paid, rangeStart, rangeEnd, onlyAvailable,sort,pageable);
+        return eventsService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, pageable);
     }
+
     @GetMapping("/events/{eventId}")
-    public EventShortDto findById(@PathVariable long eventId){
+    public EventShortDto findById(@PathVariable long eventId) {
         return eventsService.findById(eventId);
     }
 }

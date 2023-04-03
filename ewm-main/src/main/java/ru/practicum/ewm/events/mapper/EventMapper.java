@@ -52,7 +52,8 @@ public class EventMapper {
                 .views(0L)
                 .build();
     }
-    public static EventShortDto toShortDto(EventFullDto eventFullDto){
+
+    public static EventShortDto toShortDto(EventFullDto eventFullDto) {
         return EventShortDto.builder()
                 .id(eventFullDto.getId())
                 .annotation(eventFullDto.getAnnotation())
@@ -64,7 +65,8 @@ public class EventMapper {
                 .views(eventFullDto.getViews())
                 .build();
     }
-    public static EventShortDto toShortFromModel(Event event){
+
+    public static EventShortDto toShortFromModel(Event event) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())

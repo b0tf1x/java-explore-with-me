@@ -6,7 +6,9 @@ import ru.practicum.ewm.user.dto.UserDto;
 import java.util.List;
 
 public interface UserService {
-    List<UserDto> findAll(List<Long>ids, Pageable pageable);
+    List<UserDto> findAll(List<Long> ids, Pageable pageable);
+
     UserDto create(UserDto userDto);
+
     void delete(long userId);
 }

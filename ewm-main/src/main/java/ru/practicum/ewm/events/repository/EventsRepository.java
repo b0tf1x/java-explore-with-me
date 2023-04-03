@@ -12,13 +12,14 @@ import java.util.List;
 public interface EventsRepository extends JpaRepository<Event, Long> {
     @Query("select event from Event event " +
             "where event.id in ?1 ")
-    List<Event> findByEventsIds(List<Long>ids);
+    List<Event> findByEventsIds(List<Long> ids);
+
     @Query("select event from Event event " +
             "where event.initiator.id in ?1 " +
             "and event.eventStatuses in ?2 " +
             "and event.category in ?3 " +
             "and event.eventDate > ?4 " +
             "and event.eventDate < ?5 ")
-    List<Event>findEventsAdmin(List<Long> users, List<EventStatuses> states, List<Long> categories,
-                                      String rangeStart, String rangeEnd);
+    List<Event> findEventsAdmin(List<Long> users, List<EventStatuses> states, List<Long> categories,
+                                String rangeStart, String rangeEnd);
 }

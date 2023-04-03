@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.ewm.events.dto.EventShortDto;
 
 import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

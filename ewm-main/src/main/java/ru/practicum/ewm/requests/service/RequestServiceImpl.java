@@ -70,6 +70,7 @@ public class RequestServiceImpl implements RequestService {
                 .map(RequestsMapper::toRequestDto)
                 .collect(Collectors.toList());
     }
+
     @Override
     public RequestDto cancel(Long userId, Long requestId) {
         Request request = requestRepository.findByInitiatorAndRequest(userId, requestId).orElseThrow(() -> {
@@ -79,6 +80,7 @@ public class RequestServiceImpl implements RequestService {
         request = requestRepository.save(request);
         return RequestsMapper.toRequestDto(request);
     }
+
     @Override
     public List<RequestDto> findByInitiatorAndEvent(Long userId, Long eventId) {
         return requestRepository.findByInitiatorAndEvent(userId, eventId).stream()
