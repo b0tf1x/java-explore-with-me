@@ -1,8 +1,8 @@
-package ru.practicum.ewm.events.dto;
+package ru.practicum.ewm.requests.dto;
 
 import ru.practicum.ewm.events.model.Location;
 
-public class UpdateEventAdminRequest {
+public class UpdateEventUserRequest {
     String annotation;
     int category;
     String description;

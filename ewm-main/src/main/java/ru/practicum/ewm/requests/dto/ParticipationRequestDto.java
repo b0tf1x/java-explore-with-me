@@ -1,4 +1,4 @@
-package ru.practicum.ewm.events.dto;
+package ru.practicum.ewm.requests.dto;
 
 public class ParticipationRequestDto {
     long id;

@@ -1,9 +1,19 @@
 package ru.practicum.ewm.compilations.dto;
 
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateCompilationRequest {
-    Set<Integer> events;
-    boolean pinned;
-    String title;
+    private List<Long> events;
+    private Boolean pinned;
+    @NotNull
+    @NotBlank
+    private String title;
 }
