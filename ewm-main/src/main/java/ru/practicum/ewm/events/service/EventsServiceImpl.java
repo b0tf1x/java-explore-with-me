@@ -87,7 +87,7 @@ public class EventsServiceImpl implements EventsService {
         if (LocalDateTime.parse(updateEventAdminRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Событие уже прошло");
         }
-        if (event.getEventStatuses().equals(EventStatuses.CANCELED.name()) && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.toString())) {
+        if (event.getEventStatuses().equals(EventStatuses.CANCELED) && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.toString())) {
             throw new BadRequestException("Нельзя опубликовать. Событие отмененено.");
         }
         if (updateEventAdminRequest.getCategory() != null) {
