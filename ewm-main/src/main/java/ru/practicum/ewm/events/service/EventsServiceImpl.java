@@ -81,7 +81,7 @@ public class EventsServiceImpl implements EventsService {
         Event event = eventsRepository.findById(eventId).orElseThrow(() -> {
             throw new NotFoundException("Событие не найдено");
         });
-        if (event.getEventStatuses().equals(EventStatuses.PUBLISHED.name()) && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.name())) {
+        if (event.getEventStatuses().equals(EventStatuses.PUBLISHED) && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED)) {
             throw new BadRequestException("Событие уже опубликовано");
         }
         if (LocalDateTime.parse(updateEventAdminRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).isBefore(LocalDateTime.now())) {
@@ -101,7 +101,7 @@ public class EventsServiceImpl implements EventsService {
             event.setLocation(location);
         }
         if (updateEventAdminRequest.getStateAction() != null) {
-            if (updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED)) {
+            if (updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.name())) {
                 event.setEventStatuses(EventStatuses.PUBLISHED);
             }
         }
