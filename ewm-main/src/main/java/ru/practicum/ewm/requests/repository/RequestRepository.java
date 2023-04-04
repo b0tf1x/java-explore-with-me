@@ -2,11 +2,12 @@ package ru.practicum.ewm.requests.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.requests.model.Request;
 
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("select request from Request request " +
             "where request.requester.id = ?1 ")
@@ -26,6 +27,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "where request.id = ?2 " +
             "and request.requester.id = ?1 ")
     Optional<Request> findByInitiatorAndRequest(Long userId, Long requestId);
-
-    Optional<Request> findByEventIdAndRequesterId(Long requestId, Long userId);
+    @Query("select request from Request request " +
+            "where request.event.id = ?1 " +
+            "and request.requester.id = ?2")
+    Optional<Request> findByEventIdAndRequesterId(Long eventId, Long userId);
 }

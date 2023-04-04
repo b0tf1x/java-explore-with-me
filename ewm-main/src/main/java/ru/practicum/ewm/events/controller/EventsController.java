@@ -16,6 +16,7 @@ import ru.practicum.ewm.events.functions.EventStatuses;
 import ru.practicum.ewm.events.service.EventsService;
 import ru.practicum.ewm.requests.dto.UpdateEventAdminRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -49,13 +50,15 @@ public class EventsController {
                                           @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                           @RequestParam(required = false) String sort,
                                           @RequestParam(defaultValue = "0") Integer from,
-                                          @RequestParam(defaultValue = "10") Integer size) {
+                                          @RequestParam(defaultValue = "10") Integer size,
+                                          HttpServletRequest httpServletRequest) {
         PageRequest pageable = PageRequest.of(from / size, size);
-        return eventsService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, pageable);
+        return eventsService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, pageable, httpServletRequest);
     }
 
     @GetMapping("/events/{eventId}")
-    public EventShortDto findById(@PathVariable long eventId) {
-        return eventsService.findById(eventId);
+    public EventFullDto findById(@PathVariable long eventId,
+                                  HttpServletRequest httpServletRequest) {
+        return eventsService.findById(eventId, httpServletRequest);
     }
 }

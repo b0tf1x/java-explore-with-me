@@ -1,5 +1,6 @@
 package ru.practicum.ewm;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class StatsClient {
     private final WebClient webClient;

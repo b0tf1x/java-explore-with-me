@@ -18,8 +18,7 @@ public class WebClientConfig {
     @Value("$stat.url")
     private String url;
 
-    @Value("$timeout.size")
-    private int timeout;
+    private int timeout = 5000;
 
     @Bean
     public WebClient webClientWithTimeout() {
