@@ -8,6 +8,7 @@ import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.events.functions.EventStatuses;
 import ru.practicum.ewm.user.model.User;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,11 +30,13 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 100000)
     private String annotation;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
     private LocalDateTime createdOn;
+    @Column(length = 100000)
     private String description;
     private LocalDateTime eventDate;
     @ManyToOne
@@ -48,5 +51,6 @@ public class Event {
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)
     private EventStatuses eventStatuses;
+    @Column(length = 100000)
     private String title;
 }

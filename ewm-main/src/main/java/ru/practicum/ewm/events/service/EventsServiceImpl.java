@@ -100,29 +100,42 @@ public class EventsServiceImpl implements EventsService {
         Event event = eventsRepository.findById(eventId).orElseThrow(() -> {
             throw new NotFoundException("Событие не найдено");
         });
-        if (event.getEventStatuses().equals(EventStatuses.PUBLISHED)
-                && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.toString())) {
-            throw new BadRequestException("Событие уже опубликовано");
+        if (updateEventAdminRequest.getAnnotation() != null) {
+            event.setAnnotation(updateEventAdminRequest.getAnnotation());
         }
-        if (LocalDateTime.parse(updateEventAdminRequest.getEventDate(),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("Событие уже прошло");
-        }
-        if (event.getEventStatuses().equals(EventStatuses.CANCELED)
-                && updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.toString())) {
-            throw new BadRequestException("Нельзя опубликовать. Событие отмененено.");
-        }
+
         if (updateEventAdminRequest.getCategory() != null) {
             Category category = categoriesRepository.findById(updateEventAdminRequest.getCategory()).orElseThrow(() -> {
                 throw new NotFoundException("Категория не найдена");
             });
             event.setCategory(category);
         }
-        if (updateEventAdminRequest.getLocation() != null) {
-            Location location = locationRepository.save(updateEventAdminRequest.getLocation());
-            event.setLocation(location);
+
+        if (updateEventAdminRequest.getTitle() != null) {
+            event.setTitle(updateEventAdminRequest.getTitle());
         }
+
+        if (updateEventAdminRequest.getDescription() != null) {
+            event.setDescription(updateEventAdminRequest.getDescription());
+        }
+
+        if (updateEventAdminRequest.getEventDate() != null) {
+            event.setEventDate(LocalDateTime.parse(updateEventAdminRequest.getEventDate(), FORMATTER));
+        }
+
+        if (updateEventAdminRequest.getPaid() != null) {
+            event.setPaid(updateEventAdminRequest.getPaid());
+        }
+        event.setParticipantLimit(updateEventAdminRequest.getParticipantLimit());
+
+        if (updateEventAdminRequest.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventAdminRequest.getRequestModeration());
+        }
+
         if (updateEventAdminRequest.getStateAction() != null) {
+            if (event.getEventStatuses() != EventStatuses.PENDING) {
+                throw new BadRequestException("Неправильный статус");
+            }
             if (updateEventAdminRequest.getStateAction().equals(EventStatuses.PUBLISHED.name())) {
                 event.setEventStatuses(EventStatuses.PUBLISHED);
             }

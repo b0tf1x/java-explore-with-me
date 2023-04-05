@@ -20,6 +20,8 @@ import ru.practicum.ewm.events.service.PrivateEventService;
 import ru.practicum.ewm.requests.service.RequestService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -38,8 +40,8 @@ public class PrivateEventsController {
 
     @GetMapping
     public List<EventShortDto> getByCreator(@PathVariable Long userId,
-                                            @RequestParam(defaultValue = "0") Integer from,
-                                            @RequestParam(defaultValue = "20") Integer size) {
+                                            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                            @Positive @RequestParam(defaultValue = "20") Integer size) {
         PageRequest pageable = PageRequest.of(from / size, size);
         return privateEventService.getByCreator(userId,pageable);
     }
