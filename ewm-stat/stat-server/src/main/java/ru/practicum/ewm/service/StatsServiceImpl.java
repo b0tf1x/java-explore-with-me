@@ -1,18 +1,18 @@
 package ru.practicum.ewm.service;
 
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.practicum.ewm.repository.StatsRepository;
-import org.springframework.stereotype.Service;
-import ru.practicum.ewm.mapper.StatsMapper;
-import ru.practicum.ewm.dto.EndpointHitDto;
-import ru.practicum.ewm.model.EndpointHit;
-import ru.practicum.ewm.dto.ViewStatsDto;
 import lombok.RequiredArgsConstructor;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.dto.EndpointHitDto;
+import ru.practicum.ewm.dto.ViewStatsDto;
+import ru.practicum.ewm.mapper.StatsMapper;
+import ru.practicum.ewm.model.EndpointHit;
+import ru.practicum.ewm.repository.StatsRepository;
+
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
