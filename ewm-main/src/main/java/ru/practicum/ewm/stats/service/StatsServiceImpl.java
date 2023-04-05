@@ -9,6 +9,7 @@ import ru.practicum.ewm.StatsClient;
 import ru.practicum.ewm.dto.EndpointHitDto;
 
 import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

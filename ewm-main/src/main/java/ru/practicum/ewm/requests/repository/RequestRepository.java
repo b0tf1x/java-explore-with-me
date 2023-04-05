@@ -7,6 +7,7 @@ import ru.practicum.ewm.requests.model.Request;
 
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("select request from Request request " +
@@ -17,10 +18,11 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "where request.event.id = ?1 " +
             "and request.status = 'CONFIRMED'")
     List<Request> findConfirmedRequests(Long eventId);
+
     @Query("select request from Request request " +
             "where request.event.id in ?1 " +
             "and request.status = 'CONFIRMED'")
-    List<Request>findConfirmedRequestsByIds(List<Long>eventId);
+    List<Request> findConfirmedRequestsByIds(List<Long> eventId);
 
     @Query("select request from Request request " +
             "where request.event.id = ?2 " +
@@ -31,6 +33,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "where request.id = ?2 " +
             "and request.requester.id = ?1 ")
     Optional<Request> findByInitiatorAndRequest(Long userId, Long requestId);
+
     @Query("select request from Request request " +
             "where request.event.id = ?1 " +
             "and request.requester.id = ?2")

@@ -17,7 +17,6 @@ import ru.practicum.ewm.events.service.EventsService;
 import ru.practicum.ewm.requests.dto.UpdateEventAdminRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;

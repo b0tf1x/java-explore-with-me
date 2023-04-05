@@ -24,6 +24,7 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
             "and event.eventDate < ?5 ")
     List<Event> findEventsAdmin(List<Long> users, List<EventStatuses> states, List<Long> categories,
                                 String rangeStart, String rangeEnd);
+
     @Query("SELECT event " +
             "FROM Event event " +
             "WHERE " +
@@ -37,10 +38,11 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
             "AND (CAST(?6 AS date) IS NULL OR event.eventDate <= ?6) " +
             "order by event.eventDate")
     List<Event> findByParams(String text, List<EventStatuses> states,
-            List<Long> categories,  Boolean paid,
-            LocalDateTime rangeStart, LocalDateTime rangeEnd,
-            Pageable pageable);
+                             List<Long> categories, Boolean paid,
+                             LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                             Pageable pageable);
+
     @Query("select event from Event event " +
             "where event.initiator.id = ?1")
-    List<Event>findByInitiator(Long userId);
+    List<Event> findByInitiator(Long userId);
 }

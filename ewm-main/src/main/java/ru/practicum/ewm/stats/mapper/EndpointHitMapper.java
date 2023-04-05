@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 public class EndpointHitMapper {
-    public static EndpointHitDto toEndpointHitDto(String title, HttpServletRequest httpServletRequest){
+    public static EndpointHitDto toEndpointHitDto(String title, HttpServletRequest httpServletRequest) {
         return new EndpointHitDto(null,
                 title,
                 httpServletRequest.getRequestURI(),

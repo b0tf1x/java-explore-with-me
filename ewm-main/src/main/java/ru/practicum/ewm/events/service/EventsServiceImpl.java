@@ -17,7 +17,6 @@ import ru.practicum.ewm.events.dto.EventShortDto;
 import ru.practicum.ewm.events.functions.EventStatuses;
 import ru.practicum.ewm.events.mapper.EventMapper;
 import ru.practicum.ewm.events.model.Event;
-import ru.practicum.ewm.events.model.Location;
 import ru.practicum.ewm.events.repository.EventsRepository;
 import ru.practicum.ewm.events.repository.LocationRepository;
 import ru.practicum.ewm.exceptions.BadRequestException;
