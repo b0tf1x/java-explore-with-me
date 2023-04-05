@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class StatsClient {
     private final WebClient webClient;

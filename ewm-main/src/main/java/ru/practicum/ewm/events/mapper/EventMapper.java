@@ -2,6 +2,7 @@ package ru.practicum.ewm.events.mapper;
 
 import ru.practicum.ewm.categories.mapper.CategoriesMapper;
 import ru.practicum.ewm.categories.model.Category;
+import ru.practicum.ewm.events.dto.CreateEventDto;
 import ru.practicum.ewm.events.dto.EventFullDto;
 import ru.practicum.ewm.events.dto.EventShortDto;
 import ru.practicum.ewm.events.functions.EventStatuses;
@@ -15,22 +16,22 @@ import java.time.format.DateTimeFormatter;
 public class EventMapper {
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public static Event toEvent(EventFullDto eventFullDto, User user, Category category) {
+    public static Event toEvent(CreateEventDto createEventDto, User user, Category category) {
         return Event.builder()
-                .id(eventFullDto.getId())
+                .id(null)
                 .category(category)
                 .eventStatuses(EventStatuses.PENDING)
                 .createdOn(LocalDateTime.now())
                 .publishedOn(LocalDateTime.now())
                 .initiator(user)
-                .annotation(eventFullDto.getAnnotation())
-                .description(eventFullDto.getDescription())
-                .eventDate(LocalDateTime.parse(eventFullDto.getEventDate(), FORMATTER))
-                .location(eventFullDto.getLocation())
-                .paid(eventFullDto.getPaid())
-                .participantLimit(eventFullDto.getParticipantLimit())
-                .requestModeration(eventFullDto.getRequestModeration())
-                .title(eventFullDto.getTitle())
+                .annotation(createEventDto.getAnnotation())
+                .description(createEventDto.getDescription())
+                .eventDate(createEventDto.getEventDate())
+                .location(createEventDto.getLocation())
+                .paid(createEventDto.getPaid())
+                .participantLimit(createEventDto.getParticipantLimit())
+                .requestModeration(createEventDto.getRequestModeration())
+                .title(createEventDto.getTitle())
                 .build();
     }
 

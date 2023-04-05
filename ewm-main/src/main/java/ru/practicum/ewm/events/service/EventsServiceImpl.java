@@ -23,9 +23,8 @@ import ru.practicum.ewm.events.repository.LocationRepository;
 import ru.practicum.ewm.exceptions.BadRequestException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.requests.dto.UpdateEventAdminRequest;
+import ru.practicum.ewm.requests.model.Request;
 import ru.practicum.ewm.requests.repository.RequestRepository;
-import ru.practicum.ewm.stats.mapper.EndpointHitMapper;
-import ru.practicum.ewm.stats.service.StatsService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -37,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -85,11 +85,13 @@ public class EventsServiceImpl implements EventsService {
             LocalDateTime end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             predicateList.add(criteriaBuilder.and(criteriaBuilder.between(eventRoot.get("eventDate"), start, end)));
         }
-
-        return entityManager.createQuery(eventCriteriaQuery.select(eventRoot)
+        List<EventFullDto> events = entityManager.createQuery(eventCriteriaQuery.select(eventRoot)
                         .where(predicateList.toArray(Predicate[]::new))).getResultList().stream()
                 .map(EventMapper::eventFullDto)
                 .collect(Collectors.toList());
+        addViews(events, statsClient);
+        addConfirmedRequests(events, requestRepository);
+        return events;
     }
 
     @Transactional
@@ -126,6 +128,8 @@ public class EventsServiceImpl implements EventsService {
             }
         }
         event = eventsRepository.save(event);
+        addViews(List.of(EventMapper.eventFullDto(event)), statsClient);
+        addConfirmedRequests(List.of(EventMapper.eventFullDto(event)), requestRepository);
         return EventMapper.eventFullDto(event);
     }
 
@@ -191,7 +195,7 @@ public class EventsServiceImpl implements EventsService {
         }
 
         addViews(events, statsClient);
-
+        addConfirmedRequests(events, requestRepository);
         return events
                 .stream()
                 .map(EventMapper::toShortDto)
@@ -210,6 +214,7 @@ public class EventsServiceImpl implements EventsService {
 
         EventFullDto eventFullDto = EventMapper.eventFullDto(event);
         addViews(List.of(eventFullDto), statsClient);
+        addConfirmedRequests(List.of(eventFullDto), requestRepository);
         int confirmedRequests = requestRepository.findConfirmedRequests(eventId).size();
         eventFullDto.setConfirmedRequests(confirmedRequests);
         return eventFullDto;
@@ -238,5 +243,31 @@ public class EventsServiceImpl implements EventsService {
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr(),
                 LocalDateTime.now()));
+    }
+
+    public static void addConfirmedRequests(List<EventFullDto> events, RequestRepository requestRepository) {
+        Map<Long, Integer> requestsCountMap = new HashMap<>();
+
+        List<Request> requests = requestRepository.findConfirmedRequestsByIds(events
+                .stream()
+                .map(EventFullDto::getId)
+                .collect(Collectors.toList())
+        );
+
+        requests.forEach(request -> {
+            long eventId = request.getEvent().getId();
+
+            if (!requestsCountMap.containsKey(eventId)) {
+                requestsCountMap.put(eventId, 0);
+            }
+
+            requestsCountMap.put(eventId, requestsCountMap.get(eventId) + 1);
+        });
+
+        events.forEach(event -> {
+            if (requestsCountMap.containsKey(event.getId())) {
+                event.setConfirmedRequests(requestsCountMap.get(event.getId()));
+            }
+        });
     }
 }

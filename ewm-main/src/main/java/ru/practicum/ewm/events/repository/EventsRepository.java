@@ -40,4 +40,7 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
             List<Long> categories,  Boolean paid,
             LocalDateTime rangeStart, LocalDateTime rangeEnd,
             Pageable pageable);
+    @Query("select event from Event event " +
+            "where event.initiator.id = ?1")
+    List<Event>findByInitiator(Long userId);
 }

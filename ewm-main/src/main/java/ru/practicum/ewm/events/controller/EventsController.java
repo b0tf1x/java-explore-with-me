@@ -17,6 +17,9 @@ import ru.practicum.ewm.events.service.EventsService;
 import ru.practicum.ewm.requests.dto.UpdateEventAdminRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -31,13 +34,13 @@ public class EventsController {
                                               @RequestParam(required = false) List<Long> categories,
                                               @RequestParam(required = false) String rangeStart,
                                               @RequestParam(required = false) String rangeEnd,
-                                              @RequestParam(defaultValue = "0") Integer from,
-                                              @RequestParam(defaultValue = "20") Integer size) {
+                                              @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                              @Positive @RequestParam(defaultValue = "20") Integer size) {
         return eventsService.findEventsAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/admin/events/{eventId}")
-    public EventFullDto update(@PathVariable Long eventId, @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
+    public EventFullDto update(@PathVariable Long eventId, @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         return eventsService.update(eventId, updateEventAdminRequest);
     }
 
@@ -49,8 +52,8 @@ public class EventsController {
                                           @RequestParam(required = false) String rangeEnd,
                                           @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                           @RequestParam(required = false) String sort,
-                                          @RequestParam(defaultValue = "0") Integer from,
-                                          @RequestParam(defaultValue = "10") Integer size,
+                                          @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                          @Positive @RequestParam(defaultValue = "10") Integer size,
                                           HttpServletRequest httpServletRequest) {
         PageRequest pageable = PageRequest.of(from / size, size);
         return eventsService.findEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, pageable, httpServletRequest);
@@ -58,7 +61,7 @@ public class EventsController {
 
     @GetMapping("/events/{eventId}")
     public EventFullDto findById(@PathVariable long eventId,
-                                  HttpServletRequest httpServletRequest) {
+                                 HttpServletRequest httpServletRequest) {
         return eventsService.findById(eventId, httpServletRequest);
     }
 }
