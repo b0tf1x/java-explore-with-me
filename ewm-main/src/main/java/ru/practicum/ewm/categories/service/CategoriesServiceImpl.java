@@ -28,6 +28,9 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public void delete(long catId) {
+        categoriesRepository.findById(catId).orElseThrow(() -> {
+            throw new NotFoundException("Категория не найдена");
+        });
         categoriesRepository.deleteById(catId);
     }
 
@@ -36,9 +39,7 @@ public class CategoriesServiceImpl implements CategoriesService {
         Category category = categoriesRepository.findById(catId).orElseThrow(() -> {
             throw new NotFoundException("Категория не найдена");
         });
-        if (categoryDto.getName() != null) {
-            category.setName(categoryDto.getName());
-        }
+        category.setName(categoryDto.getName());
         categoriesRepository.save(category);
         return CategoriesMapper.toCategoryDto(category);
     }

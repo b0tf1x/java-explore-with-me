@@ -35,10 +35,10 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     @Override
     public void delete(Long compId) {
-        Compilation compilation = compilationsRepository.findById(compId).orElseThrow(() -> {
+        compilationsRepository.findById(compId).orElseThrow(() -> {
             throw new NotFoundException("Compilation not found");
         });
-        compilationsRepository.delete(compilation);
+        compilationsRepository.deleteById(compId);
     }
 
     @Transactional
@@ -56,6 +56,7 @@ public class CompilationServiceImpl implements CompilationService {
         if (updateCompilationRequest.getTitle() != null) {
             compilation.setTitle(updateCompilationRequest.getTitle());
         }
+        compilation = compilationsRepository.save(compilation);
         return CompilationMapper.toCompilationDto(compilation);
     }
 

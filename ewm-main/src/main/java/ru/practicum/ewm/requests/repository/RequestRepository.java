@@ -26,13 +26,13 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Query("select request from Request request " +
             "where request.event.id = ?2 " +
-            "and request.requester.id = ?1 ")
+            "and request.event.initiator.id = ?1 ")
     List<Request> findByInitiatorAndEvent(Long userId, Long eventId);
 
     @Query("select request from Request request " +
             "where request.id = ?2 " +
             "and request.requester.id = ?1 ")
-    Optional<Request> findByInitiatorAndRequest(Long userId, Long requestId);
+    Optional<Request> findByRequesterAndRequest(Long userId, Long requestId);
 
     @Query("select request from Request request " +
             "where request.event.id = ?1 " +

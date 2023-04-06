@@ -27,13 +27,13 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    LocalDateTime created;
+    private LocalDateTime created;
     @ManyToOne
     @JoinColumn(name = "event_id")
-    Event event;
+    private Event event;
     @ManyToOne
     @JoinColumn(name = "requester_id")
-    User requester;
+    private User requester;
     @Enumerated(EnumType.STRING)
-    RequestStatuses status;
+    private RequestStatuses status;
 }

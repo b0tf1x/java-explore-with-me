@@ -19,6 +19,7 @@ import ru.practicum.ewm.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,23 +34,23 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto create(Long userId, Long eventId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException("Пользователь не найден");
         });
         Event event = eventsRepository.findById(eventId).orElseThrow(() -> {
-            throw new NotFoundException("Event not found");
+            throw new NotFoundException("Событие не найдено");
         });
-        if (!event.getEventStatuses().equals(EventStatuses.PUBLISHED)) {
+        if (event.getEventStatuses() != EventStatuses.PUBLISHED) {
             throw new BadRequestException("Событие не опубликовано");
         }
-        if (event.getInitiator().getId().equals(userId)) {
+        if (Objects.equals(userId, event.getInitiator().getId())) {
             throw new BadRequestException("Нельзя отправить запрос на своё мероприятие");
         }
         int confirmedRequests = requestRepository.findConfirmedRequests(eventId).size();
-        if (event.getParticipantLimit() < confirmedRequests && event.getParticipantLimit() != 0) {
-            throw new BadRequestException("Confirmed out of limit");
+        if (event.getParticipantLimit() <= confirmedRequests && event.getParticipantLimit() != 0) {
+            throw new BadRequestException("Запросы превышают лимит");
         }
         if (requestRepository.findByEventIdAndRequesterId(eventId, userId).isPresent()) {
-            throw new BadRequestException("You can send only one request");
+            throw new BadRequestException("Можно отправить только один запрос");
         }
         RequestStatuses requestStatus = RequestStatuses.PENDING;
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
@@ -73,7 +74,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public RequestDto cancel(Long userId, Long requestId) {
-        Request request = requestRepository.findByInitiatorAndRequest(userId, requestId).orElseThrow(() -> {
+        Request request = requestRepository.findByRequesterAndRequest(userId, requestId).orElseThrow(() -> {
             throw new NotFoundException("Request not found");
         });
         request.setStatus(RequestStatuses.CANCELED);
@@ -84,6 +85,13 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestDto> findByInitiatorAndEvent(Long userId, Long eventId) {
         return requestRepository.findByInitiatorAndEvent(userId, eventId).stream()
+                .map(RequestsMapper::toRequestDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RequestDto> findByRequester(Long userId) {
+        return requestRepository.findByRequesterId(userId).stream()
                 .map(RequestsMapper::toRequestDto)
                 .collect(Collectors.toList());
     }
