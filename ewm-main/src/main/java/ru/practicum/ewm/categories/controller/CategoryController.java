@@ -23,8 +23,8 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
-@Validated
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Validated
 public class CategoryController {
     private final CategoriesService categoriesService;
 
