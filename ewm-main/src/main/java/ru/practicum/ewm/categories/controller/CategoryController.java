@@ -30,18 +30,18 @@ public class CategoryController {
 
     @PostMapping("/admin/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto create(@RequestBody CategoryDto categoryDto) {
+    public CategoryDto create(@Valid @RequestBody CategoryDto categoryDto) {
         return categoriesService.create(categoryDto);
     }
 
     @DeleteMapping("/admin/categories/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Positive @PathVariable long catId) {
+    public void delete(@PathVariable long catId) {
         categoriesService.delete(catId);
     }
 
     @PatchMapping("/admin/categories/{catId}")
-    public CategoryDto put(@Positive @PathVariable long catId, @Valid @RequestBody CategoryDto categoryDto) {
+    public CategoryDto put(@PathVariable long catId, @Valid @RequestBody CategoryDto categoryDto) {
         return categoriesService.put(catId, categoryDto);
     }
 

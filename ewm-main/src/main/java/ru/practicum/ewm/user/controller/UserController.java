@@ -18,6 +18,8 @@ import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -29,8 +31,8 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> findAll(@RequestParam(required = false) List<Long> ids,
-                                 @RequestParam(defaultValue = "0") Integer from,
-                                 @RequestParam(defaultValue = "20") Integer size) {
+                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                 @Positive @RequestParam(defaultValue = "20") Integer size) {
         PageRequest page = PageRequest.of(from / size, size);
         return userService.findAll(ids, page);
     }
