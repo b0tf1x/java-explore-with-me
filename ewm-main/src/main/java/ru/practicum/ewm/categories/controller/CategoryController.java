@@ -36,7 +36,7 @@ public class CategoryController {
 
     @DeleteMapping("/admin/categories/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long catId) {
+    public void delete(@Positive @PathVariable Long catId) {
         categoriesService.delete(catId);
     }
 
