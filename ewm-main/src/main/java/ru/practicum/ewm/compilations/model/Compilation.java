@@ -15,10 +15,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.List;
 
-@Entity
 @Table(name = "compilations")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Data
 public class Compilation {
     @Id
