@@ -12,5 +12,6 @@ public interface RequestService {
     RequestDto cancel(Long userId, Long requestId);
 
     List<RequestDto> findByInitiatorAndEvent(Long userId, Long eventId);
+
     List<RequestDto> findByRequester(Long userId);
 }
