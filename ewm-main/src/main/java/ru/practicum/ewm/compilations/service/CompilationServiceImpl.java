@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.compilations.dto.CompilationDto;
 import ru.practicum.ewm.compilations.dto.UpdateCompilationRequest;
 import ru.practicum.ewm.compilations.mapper.CompilationMapper;
@@ -18,13 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationsRepository compilationsRepository;
     private final EventRepository eventsRepository;
 
-    @Transactional
     @Override
     public CompilationDto create(UpdateCompilationRequest updateCompilationRequest) {
         List<Event> events = eventsRepository.findByIds(updateCompilationRequest.getEvents());
@@ -32,7 +29,6 @@ public class CompilationServiceImpl implements CompilationService {
         return CompilationMapper.toCompilationDto(compilation);
     }
 
-    @Transactional
     @Override
     public void delete(Long compId) {
         compilationsRepository.findById(compId).orElseThrow(() -> {
@@ -41,7 +37,6 @@ public class CompilationServiceImpl implements CompilationService {
         compilationsRepository.deleteById(compId);
     }
 
-    @Transactional
     @Override
     public CompilationDto update(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = compilationsRepository.findById(compId).orElseThrow(() -> {

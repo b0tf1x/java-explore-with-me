@@ -3,7 +3,6 @@ package ru.practicum.ewm.events.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.EndpointHitDto;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.dto.FullEventDto;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PublicEventService {
 

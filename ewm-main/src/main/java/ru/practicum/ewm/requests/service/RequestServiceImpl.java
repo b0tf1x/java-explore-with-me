@@ -3,7 +3,6 @@ package ru.practicum.ewm.requests.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.events.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.model.Event;
@@ -27,13 +26,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
 
-    @Transactional
     @Override
     public RequestDto create(Long userId, Long eventId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
@@ -99,7 +96,6 @@ public class RequestServiceImpl implements RequestService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public UpdateRequestDto requestProcessing(Long userId, Long eventId,
                                               EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {

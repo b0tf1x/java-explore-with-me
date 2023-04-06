@@ -2,7 +2,6 @@ package ru.practicum.ewm.events.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.categories.repository.CategoriesRepository;
 import ru.practicum.ewm.events.dto.AdminStateAction;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AdminEventService {
 
     private final CriteriaEventRepository criteriaEventRepository;
@@ -55,7 +53,6 @@ public class AdminEventService {
         return EventUtil.getViews(fullEventDtoList, statService);
     }
 
-    @Transactional
     public FullEventDto updateEvent(Long eventId, EventUpdateRequestDto eventUpdateRequestDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             throw new NotFoundException("Событие не найдено");

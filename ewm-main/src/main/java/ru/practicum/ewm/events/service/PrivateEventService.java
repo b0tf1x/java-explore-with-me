@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PrivateEventService {
 
@@ -51,7 +50,6 @@ public class PrivateEventService {
 
     private final StatsService statService;
 
-    @Transactional
     public FullEventDto create(Long userId, CreateEventDto createEventDto) {
         if (createEventDto.getEventDate().isBefore(LocalDateTime.now())) {
             throw new ConflictException("Ошибка в дате");
