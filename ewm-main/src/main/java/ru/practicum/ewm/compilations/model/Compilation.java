@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name = "Compilation")
+@Table(name = "compilations")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

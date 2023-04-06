@@ -6,5 +6,4 @@ import ru.practicum.ewm.events.model.Location;
 
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Long> {
-
 }

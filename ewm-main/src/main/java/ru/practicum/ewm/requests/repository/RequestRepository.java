@@ -3,6 +3,7 @@ package ru.practicum.ewm.requests.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ru.practicum.ewm.requests.dto.RequestStatuses;
 import ru.practicum.ewm.requests.model.Request;
 
 import java.util.List;
@@ -38,4 +39,14 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "where request.event.id = ?1 " +
             "and request.requester.id = ?2")
     Optional<Request> findByEventIdAndRequesterId(Long eventId, Long userId);
+
+    @Query("select request from Request request " +
+            "where request.event.id = ?1 " +
+            "and request.status = ?2 ")
+    List<Request> findAllByEventIdAndStatus(Long eventId, RequestStatuses status);
+
+    @Query("select request from Request request " +
+            "where request.event.id = ?1 " +
+            "and request.id in ?2")
+    List<Request> findByEventIdAndRequestsIds(Long eventId, List<Long> ids);
 }

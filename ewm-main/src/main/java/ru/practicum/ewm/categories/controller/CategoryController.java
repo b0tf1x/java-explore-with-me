@@ -41,7 +41,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/admin/categories/{catId}")
-    public CategoryDto put(@PathVariable long catId, @Valid @RequestBody CategoryDto categoryDto) {
+    public CategoryDto put(@Positive @PathVariable Long catId, @Valid @RequestBody CategoryDto categoryDto) {
         return categoriesService.put(catId, categoryDto);
     }
 

@@ -11,7 +11,7 @@ import ru.practicum.ewm.compilations.mapper.CompilationMapper;
 import ru.practicum.ewm.compilations.model.Compilation;
 import ru.practicum.ewm.compilations.repository.CompilationsRepository;
 import ru.practicum.ewm.events.model.Event;
-import ru.practicum.ewm.events.repository.EventsRepository;
+import ru.practicum.ewm.events.repository.EventRepository;
 import ru.practicum.ewm.exceptions.NotFoundException;
 
 import java.util.List;
@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationsRepository compilationsRepository;
-    private final EventsRepository eventsRepository;
+    private final EventRepository eventsRepository;
 
     @Transactional
     @Override
     public CompilationDto create(UpdateCompilationRequest updateCompilationRequest) {
-        List<Event> events = eventsRepository.findByEventsIds(updateCompilationRequest.getEvents());
+        List<Event> events = eventsRepository.findByIds(updateCompilationRequest.getEvents());
         Compilation compilation = compilationsRepository.save(CompilationMapper.toCompilation(updateCompilationRequest, events));
         return CompilationMapper.toCompilationDto(compilation);
     }
@@ -48,7 +48,7 @@ public class CompilationServiceImpl implements CompilationService {
             throw new NotFoundException("Compilation not found");
         });
         if (updateCompilationRequest.getEvents() != null) {
-            compilation.setEvents(eventsRepository.findByEventsIds(updateCompilationRequest.getEvents()));
+            compilation.setEvents(eventsRepository.findByIds(updateCompilationRequest.getEvents()));
         }
         if (updateCompilationRequest.getPinned() != null) {
             compilation.setPinned(updateCompilationRequest.getPinned());

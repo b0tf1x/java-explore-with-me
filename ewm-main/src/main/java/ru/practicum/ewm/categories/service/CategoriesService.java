@@ -8,9 +8,9 @@ import java.util.List;
 public interface CategoriesService {
     CategoryDto create(CategoryDto categoryDto);
 
-    void delete(long catId);
+    void delete(Long catId);
 
-    CategoryDto put(long catId, CategoryDto categoryDto);
+    CategoryDto put(Long catId, CategoryDto categoryDto);
 
     List<CategoryDto> findAll(Pageable pageable);
 

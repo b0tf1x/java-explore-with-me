@@ -4,13 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.events.functions.EventStatuses;
+import ru.practicum.ewm.events.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.model.Event;
-import ru.practicum.ewm.events.repository.EventsRepository;
-import ru.practicum.ewm.exceptions.BadRequestException;
+import ru.practicum.ewm.events.repository.EventRepository;
+import ru.practicum.ewm.exceptions.ConflictException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.requests.dto.RequestDto;
 import ru.practicum.ewm.requests.dto.RequestStatuses;
+import ru.practicum.ewm.requests.dto.UpdateRequestDto;
 import ru.practicum.ewm.requests.mapper.RequestsMapper;
 import ru.practicum.ewm.requests.model.Request;
 import ru.practicum.ewm.requests.repository.RequestRepository;
@@ -18,6 +20,7 @@ import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
-    private final EventsRepository eventsRepository;
+    private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
 
@@ -36,21 +39,21 @@ public class RequestServiceImpl implements RequestService {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new NotFoundException("Пользователь не найден");
         });
-        Event event = eventsRepository.findById(eventId).orElseThrow(() -> {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             throw new NotFoundException("Событие не найдено");
         });
-        if (event.getEventStatuses() != EventStatuses.PUBLISHED) {
-            throw new BadRequestException("Событие не опубликовано");
+        if (event.getEventState() != EventState.PUBLISHED) {
+            throw new ConflictException("Событие не опубликовано");
         }
         if (Objects.equals(userId, event.getInitiator().getId())) {
-            throw new BadRequestException("Нельзя отправить запрос на своё мероприятие");
+            throw new ConflictException("Нельзя отправить запрос на своё мероприятие");
         }
         int confirmedRequests = requestRepository.findConfirmedRequests(eventId).size();
         if (event.getParticipantLimit() <= confirmedRequests && event.getParticipantLimit() != 0) {
-            throw new BadRequestException("Запросы превышают лимит");
+            throw new ConflictException("Запросы превышают лимит");
         }
         if (requestRepository.findByEventIdAndRequesterId(eventId, userId).isPresent()) {
-            throw new BadRequestException("Можно отправить только один запрос");
+            throw new ConflictException("Можно отправить только один запрос");
         }
         RequestStatuses requestStatus = RequestStatuses.PENDING;
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
@@ -94,5 +97,56 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findByRequesterId(userId).stream()
                 .map(RequestsMapper::toRequestDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public UpdateRequestDto requestProcessing(Long userId, Long eventId,
+                                              EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> {
+            throw new NotFoundException("Событие не найдено");
+        });
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new NotFoundException("You don't have event with id " + eventId);
+        }
+        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
+            throw new ConflictException("Confirmation is not required");
+        }
+        UpdateRequestDto requestUpdateDto = new UpdateRequestDto(new ArrayList<>(), new ArrayList<>());
+        Integer confirmedRequests = requestRepository.findConfirmedRequests(eventId).size();
+        List<Request> requests = requestRepository.findByEventIdAndRequestsIds(eventId,
+                eventRequestStatusUpdateRequest.getRequestIds());
+        if (Objects.equals(eventRequestStatusUpdateRequest.getStatus(), RequestStatuses.CONFIRMED.name())
+                && confirmedRequests + requests.size() > event.getParticipantLimit()) {
+            requests.forEach(request -> request.setStatus(RequestStatuses.REJECTED));
+            List<RequestDto> requestDto = requests.stream()
+                    .map(RequestsMapper::toRequestDto)
+                    .collect(Collectors.toList());
+            requestUpdateDto.setRejectedRequests(requestDto);
+            requestRepository.saveAll(requests);
+            throw new ConflictException("Requests limit exceeded");
+        }
+        if (eventRequestStatusUpdateRequest.getStatus().equalsIgnoreCase(RequestStatuses.REJECTED.name())) {
+            requests.forEach(request -> {
+                if (request.getStatus().equals(RequestStatuses.CONFIRMED)) {
+                    throw new ConflictException("You can't reject confirmed request");
+                }
+                request.setStatus(RequestStatuses.REJECTED);
+            });
+            List<RequestDto> requestDto = requests.stream()
+                    .map(RequestsMapper::toRequestDto)
+                    .collect(Collectors.toList());
+            requestUpdateDto.setRejectedRequests(requestDto);
+            requestRepository.saveAll(requests);
+        } else if (eventRequestStatusUpdateRequest.getStatus().equalsIgnoreCase(RequestStatuses.CONFIRMED.name())
+                && eventRequestStatusUpdateRequest.getRequestIds().size() <= event.getParticipantLimit() - confirmedRequests) {
+            requests.forEach(request -> request.setStatus(RequestStatuses.CONFIRMED));
+            List<RequestDto> requestDto = requests.stream()
+                    .map(RequestsMapper::toRequestDto)
+                    .collect(Collectors.toList());
+            requestUpdateDto.setConfirmedRequests(requestDto);
+            requestRepository.saveAll(requests);
+        }
+        return requestUpdateDto;
     }
 }

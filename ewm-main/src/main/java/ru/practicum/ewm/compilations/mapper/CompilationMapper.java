@@ -20,7 +20,7 @@ public class CompilationMapper {
     public static CompilationDto toCompilationDto(Compilation compilation) {
         return new CompilationDto(compilation.getId(),
                 compilation.getEvents().stream()
-                        .map(EventMapper::toShortFromModel)
+                        .map(EventMapper::toShortEventDto)
                         .collect(Collectors.toList()),
                 compilation.getPinned(),
                 compilation.getTitle());

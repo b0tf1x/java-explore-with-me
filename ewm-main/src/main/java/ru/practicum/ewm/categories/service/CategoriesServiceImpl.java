@@ -9,6 +9,7 @@ import ru.practicum.ewm.categories.dto.CategoryDto;
 import ru.practicum.ewm.categories.mapper.CategoriesMapper;
 import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.categories.repository.CategoriesRepository;
+import ru.practicum.ewm.exceptions.ConflictException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     }
 
     @Override
-    public void delete(long catId) {
+    public void delete(Long catId) {
         categoriesRepository.findById(catId).orElseThrow(() -> {
             throw new NotFoundException("Категория не найдена");
         });
@@ -35,10 +36,13 @@ public class CategoriesServiceImpl implements CategoriesService {
     }
 
     @Override
-    public CategoryDto put(long catId, CategoryDto categoryDto) {
+    public CategoryDto put(Long catId, CategoryDto categoryDto) {
         Category category = categoriesRepository.findById(catId).orElseThrow(() -> {
             throw new NotFoundException("Категория не найдена");
         });
+        if (categoryDto.getName().equals(category.getName())) {
+            throw new ConflictException("Такое название уже существует");
+        }
         category.setName(categoryDto.getName());
         categoriesRepository.save(category);
         return CategoriesMapper.toCategoryDto(category);
