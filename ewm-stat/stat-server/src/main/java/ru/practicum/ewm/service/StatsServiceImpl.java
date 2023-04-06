@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @Transactional(readOnly = true)
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
