@@ -89,6 +89,7 @@ public class EventUtil {
                 counter.getOrDefault(element.getEvent().getId(), 0) + 1));
         eventDtos.forEach(event -> event.setConfirmedRequests(counter.get(event.getId())));
     }
+
     public static void toEventFromUpdateRequestDto(Event event,
                                                    EventUpdateRequestDto eventUpdateRequestDto) {
         if (Objects.equals(eventUpdateRequestDto.getStateAction(), UserActionState.CANCEL_REVIEW.name())) {
