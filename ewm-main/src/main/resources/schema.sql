@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS EVENTS
     DESCRIPTION        VARCHAR(5000),
     EVENT_DATE         TIMESTAMP WITHOUT TIME ZONE not null,
     INITIATOR_ID       BIGINT                      not null references users (id),
-    LOCATION_ID        BIGINT                      not null references locations (id),
+    LOCATION_ID        BIGINT                      not null references location (id),
     PAID               BOOLEAN     DEFAULT FALSE,
     PARTICIPANT_LIMIT  INT         DEFAULT 0,
     PUBLISHED_ON       TIMESTAMP WITHOUT TIME ZONE not null,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS COMPILATION_EVENTS
     COMPILATION_ID BIGINT not null references compilations (id),
     EVENT_ID       BIGINT not null references events (id),
     CONSTRAINT PK_COMPILATION_EVENTS
-    PRIMARY KEY (COMPILATION_ID, EVENT_ID),
+    PRIMARY KEY (COMPILATION_ID, EVENT_ID)
     );
 
 CREATE TABLE IF NOT EXISTS REQUESTS
