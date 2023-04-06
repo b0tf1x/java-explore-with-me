@@ -36,14 +36,13 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     public CategoryDto put(Long catId, CategoryDto categoryDto) {
         Category category = categoriesRepository.findById(catId).orElseThrow(() -> {
-            throw new NotFoundException("Категория не найдена");
+            throw new NotFoundException("Category not found");
         });
         if (categoryDto.getName().equals(category.getName())) {
-            throw new ConflictException("Такое название уже существует");
+            throw new ConflictException("Same category name");
         }
         category.setName(categoryDto.getName());
-        categoriesRepository.save(category);
-        return CategoriesMapper.toCategoryDto(category);
+        return CategoriesMapper.toCategoryDto(categoriesRepository.save(category));
     }
 
     public List<CategoryDto> findAll(Pageable pageable) {
