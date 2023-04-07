@@ -14,7 +14,6 @@ import ru.practicum.ewm.events.util.EventUtil;
 import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.requests.dto.RequestStatuses;
 import ru.practicum.ewm.requests.repository.RequestRepository;
-import ru.practicum.ewm.stats.mapper.EndpointHitMapper;
 import ru.practicum.ewm.stats.service.StatsService;
 
 import javax.servlet.http.HttpServletRequest;

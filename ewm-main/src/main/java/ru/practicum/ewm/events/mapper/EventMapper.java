@@ -73,6 +73,7 @@ public class EventMapper {
                 fullEventDto.getTitle(),
                 fullEventDto.getViews());
     }
+
     public static String format(LocalDateTime value) {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(value);
     }
