@@ -11,6 +11,7 @@ import ru.practicum.ewm.user.mapper.UserMapper;
 import ru.practicum.ewm.user.model.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class EventMapper {
 
@@ -36,13 +37,13 @@ public class EventMapper {
                 event.getAnnotation(),
                 CategoriesMapper.toCategoryDto(event.getCategory()),
                 0,
-                event.getCreatedOn().toString(),
-                event.getDescription().toString(),
-                event.getEventDate().toString(),
+                format(event.getCreatedOn()),
+                event.getDescription(),
+                format(event.getEventDate()),
                 UserMapper.toUserShort(event.getInitiator()),
                 event.getLocation(), event.getPaid(),
                 event.getParticipantLimit(),
-                event.getPublishedOn().toString(),
+                format(event.getPublishedOn()),
                 event.getRequestModeration(),
                 event.getEventState().toString(),
                 event.getTitle(), 0L);
@@ -71,6 +72,9 @@ public class EventMapper {
                 fullEventDto.getPaid(),
                 fullEventDto.getTitle(),
                 fullEventDto.getViews());
+    }
+    public static String format(LocalDateTime value) {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(value);
     }
 }
 

@@ -78,7 +78,10 @@ public class PublicEventService {
         });
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         fullEventDto.setConfirmedRequests(requestsRepository.findAllByEventIdAndStatus(event.getId(), RequestStatuses.CONFIRMED).size());
-        statService.create(EndpointHitMapper.toEndpointHitDto("ewm-main-service", request));
+        statService.create(new EndpointHitDto(null, "ewm-main",
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now()));
         return EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
     }
 }
