@@ -24,7 +24,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class EventUtil {
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(PATTERN);
     public static final LocalDateTime MAX_TIME = toTime("5000-01-01 00:00:00");
     public static final LocalDateTime MIN_TIME = toTime("2000-01-01 00:00:00");
 

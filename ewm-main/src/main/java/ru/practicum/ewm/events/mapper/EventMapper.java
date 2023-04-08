@@ -13,6 +13,8 @@ import ru.practicum.ewm.user.model.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static ru.practicum.ewm.events.util.EventUtil.PATTERN;
+
 public class EventMapper {
 
     public static Event toEventFromCreateDto(User initiator, Category category, CreateEventDto createEventDto) {
@@ -75,7 +77,7 @@ public class EventMapper {
     }
 
     public static String format(LocalDateTime value) {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(value);
+        return DateTimeFormatter.ofPattern(PATTERN).format(value);
     }
 }
 
