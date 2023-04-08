@@ -4,14 +4,17 @@ import ru.practicum.ewm.categories.mapper.CategoriesMapper;
 import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.events.dto.CreateEventDto;
 import ru.practicum.ewm.events.dto.EventState;
+import ru.practicum.ewm.events.dto.EventUpdateRequestDto;
 import ru.practicum.ewm.events.dto.FullEventDto;
 import ru.practicum.ewm.events.dto.ShortEventDto;
+import ru.practicum.ewm.events.dto.UserActionState;
 import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.user.mapper.UserMapper;
 import ru.practicum.ewm.user.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static ru.practicum.ewm.events.util.EventUtil.PATTERN;
 
@@ -63,7 +66,37 @@ public class EventMapper {
                 0L);
 
     }
-
+    public static void toEventFromUpdateRequestDto(Event event,
+                                                   EventUpdateRequestDto eventUpdateRequestDto) {
+        if (Objects.equals(eventUpdateRequestDto.getStateAction(), UserActionState.CANCEL_REVIEW.name())) {
+            event.setEventState(EventState.CANCELED);
+        }
+        if (Objects.equals(eventUpdateRequestDto.getStateAction(), UserActionState.SEND_TO_REVIEW.name())) {
+            event.setEventState(EventState.PENDING);
+        }
+        if (eventUpdateRequestDto.getAnnotation() != null) {
+            event.setAnnotation(eventUpdateRequestDto.getAnnotation());
+        }
+        if (eventUpdateRequestDto.getDescription() != null) {
+            event.setDescription(eventUpdateRequestDto.getDescription());
+        }
+        if (eventUpdateRequestDto.getEventDate() != null) {
+            event.setEventDate(LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        }
+        if (eventUpdateRequestDto.getPaid() != null) {
+            event.setPaid(eventUpdateRequestDto.getPaid());
+        }
+        if (eventUpdateRequestDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(eventUpdateRequestDto.getParticipantLimit());
+        }
+        if (eventUpdateRequestDto.getRequestModeration() != null) {
+            event.setRequestModeration(eventUpdateRequestDto.getRequestModeration());
+        }
+        if (eventUpdateRequestDto.getTitle() != null) {
+            event.setTitle(eventUpdateRequestDto.getTitle());
+        }
+    }
     public static ShortEventDto toShortFromFull(FullEventDto fullEventDto) {
         return new ShortEventDto(fullEventDto.getId(),
                 fullEventDto.getAnnotation(),

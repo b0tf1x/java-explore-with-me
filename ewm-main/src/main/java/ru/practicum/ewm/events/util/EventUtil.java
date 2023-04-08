@@ -49,60 +49,16 @@ public class EventUtil {
         return new ArrayList<>(views.values());
     }
 
-    public static void getConfirmedRequests(List<FullEventDto> eventDtos,
-                                            RequestRepository requestsRepository) {
+    public static <T extends EventDto> void getConfirmedRequests(List<T> eventDtos,
+                                                                 RequestRepository requestsRepository) {
         List<Long> ids = eventDtos.stream()
-                .map(FullEventDto::getId)
+                .map(EventDto::getId)
                 .collect(Collectors.toList());
         List<Request> requests = requestsRepository.findConfirmedRequestsByIds(ids);
         Map<Long, Integer> counter = new HashMap<>();
         requests.forEach(element -> counter.put(element.getEvent().getId(),
                 counter.getOrDefault(element.getEvent().getId(), 0) + 1));
         eventDtos.forEach(event -> event.setConfirmedRequests(counter.get(event.getId())));
-    }
-
-    public static void getConfirmedRequestsToShort(List<ShortEventDto> eventDtos,
-                                                   RequestRepository requestsRepository) {
-        List<Long> ids = eventDtos.stream()
-                .map(ShortEventDto::getId)
-                .collect(Collectors.toList());
-        List<Request> requests = requestsRepository.findConfirmedRequestsByIds(ids);
-        Map<Long, Integer> counter = new HashMap<>();
-        requests.forEach(element -> counter.put(element.getEvent().getId(),
-                counter.getOrDefault(element.getEvent().getId(), 0) + 1));
-        eventDtos.forEach(event -> event.setConfirmedRequests(counter.get(event.getId())));
-    }
-
-    public static void toEventFromUpdateRequestDto(Event event,
-                                                   EventUpdateRequestDto eventUpdateRequestDto) {
-        if (Objects.equals(eventUpdateRequestDto.getStateAction(), UserActionState.CANCEL_REVIEW.name())) {
-            event.setEventState(EventState.CANCELED);
-        }
-        if (Objects.equals(eventUpdateRequestDto.getStateAction(), UserActionState.SEND_TO_REVIEW.name())) {
-            event.setEventState(EventState.PENDING);
-        }
-        if (eventUpdateRequestDto.getAnnotation() != null) {
-            event.setAnnotation(eventUpdateRequestDto.getAnnotation());
-        }
-        if (eventUpdateRequestDto.getDescription() != null) {
-            event.setDescription(eventUpdateRequestDto.getDescription());
-        }
-        if (eventUpdateRequestDto.getEventDate() != null) {
-            event.setEventDate(LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        }
-        if (eventUpdateRequestDto.getPaid() != null) {
-            event.setPaid(eventUpdateRequestDto.getPaid());
-        }
-        if (eventUpdateRequestDto.getParticipantLimit() != null) {
-            event.setParticipantLimit(eventUpdateRequestDto.getParticipantLimit());
-        }
-        if (eventUpdateRequestDto.getRequestModeration() != null) {
-            event.setRequestModeration(eventUpdateRequestDto.getRequestModeration());
-        }
-        if (eventUpdateRequestDto.getTitle() != null) {
-            event.setTitle(eventUpdateRequestDto.getTitle());
-        }
     }
 
     public static String toString(LocalDateTime localDateTime) {

@@ -8,4 +8,5 @@ import lombok.Setter;
 public class EventDto {
     protected Long id;
     private Long views;
+    private Integer confirmedRequests;
 }

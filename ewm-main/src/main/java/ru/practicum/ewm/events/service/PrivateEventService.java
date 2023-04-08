@@ -71,7 +71,7 @@ public class PrivateEventService {
         List<ShortEventDto> shortEventDtos = eventRepository.findAllByInitiatorId(userId, pageable).stream()
                 .map(EventMapper::toShortEventDto)
                 .collect(Collectors.toList());
-        EventUtil.getConfirmedRequestsToShort(shortEventDtos, requestsRepository);
+        EventUtil.getConfirmedRequests(shortEventDtos, requestsRepository);
         return EventUtil.getViews(shortEventDtos, statService);
     }
 
@@ -109,7 +109,7 @@ public class PrivateEventService {
             Location location = locationRepository.save(eventUpdateRequestDto.getLocation());
             event.setLocation(location);
         }
-        EventUtil.toEventFromUpdateRequestDto(event, eventUpdateRequestDto);
+        EventMapper.toEventFromUpdateRequestDto(event, eventUpdateRequestDto);
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         fullEventDto.setConfirmedRequests(requestsRepository.findAllByEventIdAndStatus(eventId, RequestStatuses.CONFIRMED)
                 .size());

@@ -84,7 +84,7 @@ public class AdminEventService {
         if (eventUpdateRequestDto.getLocation() != null) {
             event.setLocation(locationRepository.save(eventUpdateRequestDto.getLocation()));
         }
-        EventUtil.toEventFromUpdateRequestDto(event, eventUpdateRequestDto);
+        EventMapper.toEventFromUpdateRequestDto(event, eventUpdateRequestDto);
         System.out.println("event" + event);
         eventRepository.save(event);
 
