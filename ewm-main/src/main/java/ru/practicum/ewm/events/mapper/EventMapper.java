@@ -83,7 +83,7 @@ public class EventMapper {
         }
         if (eventUpdateRequestDto.getEventDate() != null) {
             event.setEventDate(LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    DateTimeFormatter.ofPattern(PATTERN)));
         }
         if (eventUpdateRequestDto.getPaid() != null) {
             event.setPaid(eventUpdateRequestDto.getPaid());
