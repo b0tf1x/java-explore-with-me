@@ -66,6 +66,7 @@ public class EventMapper {
                 0L);
 
     }
+
     public static void toEventFromUpdateRequestDto(Event event,
                                                    EventUpdateRequestDto eventUpdateRequestDto) {
         if (Objects.equals(eventUpdateRequestDto.getStateAction(), UserActionState.CANCEL_REVIEW.name())) {
@@ -97,6 +98,7 @@ public class EventMapper {
             event.setTitle(eventUpdateRequestDto.getTitle());
         }
     }
+
     public static ShortEventDto toShortFromFull(FullEventDto fullEventDto) {
         return new ShortEventDto(fullEventDto.getId(),
                 fullEventDto.getAnnotation(),

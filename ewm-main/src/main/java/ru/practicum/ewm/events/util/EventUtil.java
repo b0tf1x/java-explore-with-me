@@ -4,12 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.practicum.ewm.dto.ViewStatsDto;
 import ru.practicum.ewm.events.dto.EventDto;
-import ru.practicum.ewm.events.dto.EventState;
-import ru.practicum.ewm.events.dto.EventUpdateRequestDto;
-import ru.practicum.ewm.events.dto.FullEventDto;
-import ru.practicum.ewm.events.dto.ShortEventDto;
-import ru.practicum.ewm.events.dto.UserActionState;
-import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.requests.model.Request;
 import ru.practicum.ewm.requests.repository.RequestRepository;
 import ru.practicum.ewm.stats.service.StatsService;
@@ -21,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class EventUtil {
