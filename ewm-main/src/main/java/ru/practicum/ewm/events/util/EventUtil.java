@@ -30,15 +30,7 @@ public class EventUtil {
     public static final LocalDateTime MAX_TIME = toTime("5000-01-01 00:00:00");
     public static final LocalDateTime MIN_TIME = toTime("2000-01-01 00:00:00");
 
-    public static List<FullEventDto> getViewsToFull(List<FullEventDto> eventDtos, StatsService statsService) {
-        return addViews(eventDtos, statsService);
-    }
-
-    public static List<ShortEventDto> getViewsToShort(List<ShortEventDto> eventDtos, StatsService statsService) {
-        return addViews(eventDtos, statsService);
-    }
-
-    public static <T extends EventDto> List<T> addViews(List<T> eventDtos, StatsService statsService) {
+    public static <T extends EventDto> List<T> getViews(List<T> eventDtos, StatsService statsService) {
         Map<String, T> views = eventDtos.stream()
                 .collect(Collectors.toMap(eventDto -> "/events/" + eventDto.getId(),
                         eventDto -> eventDto));

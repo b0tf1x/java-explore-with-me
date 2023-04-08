@@ -72,7 +72,7 @@ public class PrivateEventService {
                 .map(EventMapper::toShortEventDto)
                 .collect(Collectors.toList());
         EventUtil.getConfirmedRequestsToShort(shortEventDtos, requestsRepository);
-        return EventUtil.getViewsToShort(shortEventDtos, statService);
+        return EventUtil.getViews(shortEventDtos, statService);
     }
 
     public FullEventDto getEventInfoByCreator(Long userId, Long eventId) {
@@ -81,7 +81,7 @@ public class PrivateEventService {
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         fullEventDto.setConfirmedRequests(requestsRepository
                 .findAllByEventIdAndStatus(eventId, RequestStatuses.CONFIRMED).size());
-        return EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
+        return EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
     }
 
     @Transactional
@@ -113,6 +113,6 @@ public class PrivateEventService {
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         fullEventDto.setConfirmedRequests(requestsRepository.findAllByEventIdAndStatus(eventId, RequestStatuses.CONFIRMED)
                 .size());
-        return EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
+        return EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
     }
 }

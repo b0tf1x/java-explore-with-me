@@ -50,7 +50,7 @@ public class AdminEventService {
                 .map(EventMapper::toFullEventDto)
                 .collect(Collectors.toList());
         EventUtil.getConfirmedRequests(fullEventDtoList, requestsRepository);
-        return EventUtil.getViewsToFull(fullEventDtoList, statService);
+        return EventUtil.getViews(fullEventDtoList, statService);
     }
 
     public FullEventDto updateEvent(Long eventId, EventUpdateRequestDto eventUpdateRequestDto) {
@@ -90,7 +90,7 @@ public class AdminEventService {
 
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         EventUtil.getConfirmedRequests(Collections.singletonList(fullEventDto), requestsRepository);
-        FullEventDto dto = EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
+        FullEventDto dto = EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
         System.out.println(dto);
         return dto;
     }
