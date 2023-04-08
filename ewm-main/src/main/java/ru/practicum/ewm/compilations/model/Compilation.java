@@ -1,8 +1,9 @@
 package ru.practicum.ewm.compilations.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.ewm.events.model.Event;
 
 import javax.persistence.Column;
@@ -20,7 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Data
+@Getter
+@Setter
 public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
