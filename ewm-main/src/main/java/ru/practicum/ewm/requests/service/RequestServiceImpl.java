@@ -66,13 +66,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestDto> findByInitiatorId(Long userId) {
-        return requestRepository.findByRequesterId(userId).stream()
-                .map(RequestsMapper::toRequestDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public RequestDto cancel(Long userId, Long requestId) {
         Request request = requestRepository.findByRequesterAndRequest(userId, requestId).orElseThrow(() -> {
             throw new NotFoundException("Request not found");

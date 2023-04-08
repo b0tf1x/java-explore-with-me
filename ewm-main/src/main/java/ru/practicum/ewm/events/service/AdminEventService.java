@@ -57,30 +57,10 @@ public class AdminEventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> {
             throw new NotFoundException("Событие не найдено");
         });
-        if (eventUpdateRequestDto.getEventDate() != null) {
-            if (LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
-                    dateTimeFormatter).isBefore(LocalDateTime.now())) {
-                throw new ConflictException("Дата уже прошла");
-            } else {
-                event.setEventDate(LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
-                        dateTimeFormatter));
-            }
-        }
-        checkStatus(event, eventUpdateRequestDto);
-        if (eventUpdateRequestDto.getStateAction() != null) {
-            if (eventUpdateRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT.name())) {
-                event.setEventState(EventState.PUBLISHED);
-            } else if (eventUpdateRequestDto.getStateAction().equals(AdminStateAction.REJECT_EVENT.name())
-                    && event.getEventState() != EventState.PUBLISHED) {
-                event.setEventState(EventState.CANCELED);
-            }
-        }
-        if (eventUpdateRequestDto.getCategory() != null) {
-            Category category = categoriesRepository.findById(eventUpdateRequestDto.getCategory()).orElseThrow(() -> {
-                throw new NotFoundException("Категория не найдена");
-            });
-            event.setCategory(category);
-        }
+        eventCheckSetDate(eventUpdateRequestDto, event);
+        checkStatusExceptions(event, eventUpdateRequestDto);
+        eventCheckSetState(eventUpdateRequestDto, event);
+        eventCheckSetCategory(eventUpdateRequestDto, event);
         if (eventUpdateRequestDto.getLocation() != null) {
             event.setLocation(locationRepository.save(eventUpdateRequestDto.getLocation()));
         }
@@ -95,7 +75,39 @@ public class AdminEventService {
         return dto;
     }
 
-    public void checkStatus(Event event, EventUpdateRequestDto eventUpdateRequestDto) {
+    private void eventCheckSetCategory(EventUpdateRequestDto eventUpdateRequestDto, Event event) {
+        if (eventUpdateRequestDto.getCategory() != null) {
+            Category category = categoriesRepository.findById(eventUpdateRequestDto.getCategory()).orElseThrow(() -> {
+                throw new NotFoundException("Категория не найдена");
+            });
+            event.setCategory(category);
+        }
+    }
+
+    private void eventCheckSetDate(EventUpdateRequestDto eventUpdateRequestDto, Event event) {
+        if (eventUpdateRequestDto.getEventDate() != null) {
+            if (LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
+                    dateTimeFormatter).isBefore(LocalDateTime.now())) {
+                throw new ConflictException("Дата уже прошла");
+            } else {
+                event.setEventDate(LocalDateTime.parse(eventUpdateRequestDto.getEventDate(),
+                        dateTimeFormatter));
+            }
+        }
+    }
+
+    private void eventCheckSetState(EventUpdateRequestDto eventUpdateRequestDto, Event event) {
+        if (eventUpdateRequestDto.getStateAction() != null) {
+            if (eventUpdateRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT.name())) {
+                event.setEventState(EventState.PUBLISHED);
+            } else if (eventUpdateRequestDto.getStateAction().equals(AdminStateAction.REJECT_EVENT.name())
+                    && event.getEventState() != EventState.PUBLISHED) {
+                event.setEventState(EventState.CANCELED);
+            }
+        }
+    }
+
+    private void checkStatusExceptions(Event event, EventUpdateRequestDto eventUpdateRequestDto) {
         if (event.getEventState() == EventState.PUBLISHED
                 && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.PUBLISH_EVENT.name())) {
             throw new ConflictException("Событие уже создано");
