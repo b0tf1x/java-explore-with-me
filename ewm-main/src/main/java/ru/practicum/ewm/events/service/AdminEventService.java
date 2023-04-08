@@ -50,7 +50,7 @@ public class AdminEventService {
                 .map(EventMapper::toFullEventDto)
                 .collect(Collectors.toList());
         EventUtil.getConfirmedRequests(fullEventDtoList, requestsRepository);
-        return EventUtil.getViews(fullEventDtoList, statService);
+        return EventUtil.getViewsToFull(fullEventDtoList, statService);
     }
 
     public FullEventDto updateEvent(Long eventId, EventUpdateRequestDto eventUpdateRequestDto) {
@@ -66,18 +66,7 @@ public class AdminEventService {
                         dateTimeFormatter));
             }
         }
-        if (event.getEventState() == EventState.PUBLISHED
-                && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.PUBLISH_EVENT.name())) {
-            throw new ConflictException("Событие уже создано");
-        }
-        if (event.getEventState() == EventState.CANCELED
-                && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.PUBLISH_EVENT.name())) {
-            throw new ConflictException("Событие отменено");
-        }
-        if (event.getEventState() == EventState.PUBLISHED
-                && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.REJECT_EVENT.name())) {
-            throw new ConflictException("Событие уже опубликовано");
-        }
+        checkStatus(event, eventUpdateRequestDto);
         if (eventUpdateRequestDto.getStateAction() != null) {
             if (eventUpdateRequestDto.getStateAction().equals(AdminStateAction.PUBLISH_EVENT.name())) {
                 event.setEventState(EventState.PUBLISHED);
@@ -101,8 +90,23 @@ public class AdminEventService {
 
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         EventUtil.getConfirmedRequests(Collections.singletonList(fullEventDto), requestsRepository);
-        FullEventDto dto = EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
+        FullEventDto dto = EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
         System.out.println(dto);
         return dto;
+    }
+
+    public void checkStatus(Event event, EventUpdateRequestDto eventUpdateRequestDto) {
+        if (event.getEventState() == EventState.PUBLISHED
+                && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.PUBLISH_EVENT.name())) {
+            throw new ConflictException("Событие уже создано");
+        }
+        if (event.getEventState() == EventState.CANCELED
+                && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.PUBLISH_EVENT.name())) {
+            throw new ConflictException("Событие отменено");
+        }
+        if (event.getEventState() == EventState.PUBLISHED
+                && eventUpdateRequestDto.getStateAction().equalsIgnoreCase(AdminStateAction.REJECT_EVENT.name())) {
+            throw new ConflictException("Событие отклонено");
+        }
     }
 }

@@ -3,6 +3,7 @@ package ru.practicum.ewm.events.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.practicum.ewm.dto.ViewStatsDto;
+import ru.practicum.ewm.events.dto.EventDto;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.dto.EventUpdateRequestDto;
 import ru.practicum.ewm.events.dto.FullEventDto;
@@ -29,29 +30,18 @@ public class EventUtil {
     public static final LocalDateTime MAX_TIME = toTime("5000-01-01 00:00:00");
     public static final LocalDateTime MIN_TIME = toTime("2000-01-01 00:00:00");
 
-    public static List<FullEventDto> getViews(List<FullEventDto> eventDtos, StatsService statService) {
-        Map<String, FullEventDto> views = eventDtos.stream()
-                .collect(Collectors.toMap(fullEventDto -> "/events/" + fullEventDto.getId(),
-                        fullEventDto -> fullEventDto));
-        Object responseBody = statService.getViews(toString(MIN_TIME),
-                        toString(MAX_TIME),
-                        new ArrayList<>(views.keySet()),
-                        false)
-                .getBody();
-        List<ViewStatsDto> viewStatsDtos = new ObjectMapper().convertValue(responseBody, new TypeReference<>() {
-        });
-        viewStatsDtos.forEach(viewStatsDto -> {
-            if (views.containsKey(viewStatsDto.getUri())) {
-                views.get(viewStatsDto.getUri()).setViews(viewStatsDto.getHits());
-            }
-        });
-        return new ArrayList<>(views.values());
+    public static List<FullEventDto> getViewsToFull(List<FullEventDto> eventDtos, StatsService statsService) {
+        return addViews(eventDtos, statsService);
     }
 
     public static List<ShortEventDto> getViewsToShort(List<ShortEventDto> eventDtos, StatsService statsService) {
-        Map<String, ShortEventDto> views = eventDtos.stream()
-                .collect(Collectors.toMap(fullEventDto -> "/events/" + fullEventDto.getId(),
-                        fullEventDto -> fullEventDto));
+        return addViews(eventDtos, statsService);
+    }
+
+    public static <T extends EventDto> List<T> addViews(List<T> eventDtos, StatsService statsService) {
+        Map<String, T> views = eventDtos.stream()
+                .collect(Collectors.toMap(eventDto -> "/events/" + eventDto.getId(),
+                        eventDto -> eventDto));
         Object responseBody = statsService.getViews(toString(MIN_TIME),
                         toString(MAX_TIME),
                         new ArrayList<>(views.keySet()),

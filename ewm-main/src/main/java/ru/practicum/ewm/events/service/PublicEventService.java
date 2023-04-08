@@ -61,9 +61,7 @@ public class PublicEventService {
                 request.getRequestURI(),
                 request.getRemoteAddr(),
                 LocalDateTime.now()));
-        List<ShortEventDto> eventsShort = EventUtil.getViews(fullEventDtoList, statService).stream()
-                .map(EventMapper::toShortFromFull)
-                .collect(Collectors.toList());
+        List<ShortEventDto> eventsShort = EventUtil.getViewsToShort(fullEventDtoList.stream().map(EventMapper::toShortFromFull).collect(Collectors.toList()), statService);
         if (sort != null && sort.equalsIgnoreCase("VIEWS")) {
             eventsShort.sort((e1, e2) -> e2.getViews().compareTo(e1.getViews()));
         }
@@ -81,6 +79,6 @@ public class PublicEventService {
                 request.getRequestURI(),
                 request.getRemoteAddr(),
                 LocalDateTime.now()));
-        return EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
+        return EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
     }
 }

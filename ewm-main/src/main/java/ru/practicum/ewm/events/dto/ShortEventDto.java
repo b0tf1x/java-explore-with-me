@@ -13,7 +13,7 @@ import lombok.Setter;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShortEventDto {
+public class ShortEventDto extends EventDto {
 
     private Long id;
 

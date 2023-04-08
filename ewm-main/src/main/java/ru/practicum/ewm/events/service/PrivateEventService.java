@@ -81,7 +81,7 @@ public class PrivateEventService {
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         fullEventDto.setConfirmedRequests(requestsRepository
                 .findAllByEventIdAndStatus(eventId, RequestStatuses.CONFIRMED).size());
-        return EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
+        return EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
     }
 
     @Transactional
@@ -113,6 +113,6 @@ public class PrivateEventService {
         FullEventDto fullEventDto = EventMapper.toFullEventDto(event);
         fullEventDto.setConfirmedRequests(requestsRepository.findAllByEventIdAndStatus(eventId, RequestStatuses.CONFIRMED)
                 .size());
-        return EventUtil.getViews(Collections.singletonList(fullEventDto), statService).get(0);
+        return EventUtil.getViewsToFull(Collections.singletonList(fullEventDto), statService).get(0);
     }
 }

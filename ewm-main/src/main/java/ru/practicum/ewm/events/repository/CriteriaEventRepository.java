@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.practicum.ewm.events.util.EventUtil.PATTERN;
+
 @Repository
 @RequiredArgsConstructor
 public class CriteriaEventRepository {
@@ -47,8 +49,8 @@ public class CriteriaEventRepository {
         }
 
         if (rangeStart != null && rangeEnd != null) {
-            LocalDateTime start = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            LocalDateTime end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime start = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(PATTERN));
+            LocalDateTime end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(PATTERN));
             predicateList.add(criteriaBuilder.and(criteriaBuilder.between(eventRoot.get("eventDate"), start, end)));
         }
 

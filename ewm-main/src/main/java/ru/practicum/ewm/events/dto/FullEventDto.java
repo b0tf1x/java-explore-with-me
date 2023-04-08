@@ -12,7 +12,7 @@ import ru.practicum.ewm.user.dto.UserShortDto;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class FullEventDto {
+public class FullEventDto extends EventDto {
 
     private Long id;
 

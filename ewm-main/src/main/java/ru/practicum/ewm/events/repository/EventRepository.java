@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.model.Event;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
