@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteByUser(Long userId, Long commentId) {
         checkUser(userId);
         Comment comment = checkComment(commentId);
-        if (comment.getCreator().getId() != userId) {
+        if (!comment.getCreator().getId().equals(userId)) {
             throw new ConflictException("Нельзя удалить чужой комментарий");
         }
         commentsRepository.deleteById(commentId);
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
         checkUser(userId);
         checkEvent(eventId);
         Comment comment = checkComment(commentId);
-        if (comment.getCreator().getId() != userId) {
+        if (!comment.getCreator().getId().equals(userId)) {
             throw new ConflictException("Нельзя изменить чужой комментарий");
         }
         if (commentDto.getDescription() != null) {
